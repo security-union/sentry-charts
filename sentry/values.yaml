@@ -9,28 +9,28 @@ user:
 # recommended to set false for updating the helm chart afterwards,
 # as you will have some downtime on each update if it's a hook
 # deploys relay & snuba consumers as post hooks
-asHook: true
+asHook: false
 
 images:
   sentry:
-    # repository: getsentry/sentry
+    repository: getsentry/sentry
     # tag: Chart.AppVersion
-    # pullPolicy: IfNotPresent
+    pullPolicy: IfNotPresent
     imagePullSecrets: []
   snuba:
-    # repository: getsentry/snuba
+    repository: getsentry/snuba
     # tag: Chart.AppVersion
-    # pullPolicy: IfNotPresent
+    pullPolicy: IfNotPresent
     imagePullSecrets: []
   relay:
-    # repository: getsentry/relay
+    repository: getsentry/relay
     # tag: Chart.AppVersion
-    # pullPolicy: IfNotPresent
+    pullPolicy: IfNotPresent
     imagePullSecrets: []
   symbolicator:
-    # repository: getsentry/symbolicator
+    repository: getsentry/symbolicator
     tag: 0.3.3
-    # pullPolicy: IfNotPresent
+    pullPolicy: IfNotPresent
     imagePullSecrets: []
 
 relay:
@@ -79,7 +79,7 @@ sentry:
     vstsLimitedScopes: true
 
   worker:
-    replicas: 3
+    replicas: 1
     # concurrency: 4
     env: []
     resources: {}
@@ -235,12 +235,12 @@ hooks:
 
 system:
   ## be sure to include the scheme on the url, for example: "https://sentry.example.com"
-  url: ""
-  adminEmail: ""
+  url: "https://sentry.armore.dev"
+  adminEmail: "support@armore.dev"
   ## This should only be used if you’re installing Sentry behind your company’s firewall.
-  public: false
+  public: true
   ## This will generate one for you (it's must be given upon updates)
-  #secretKey: "xx"
+  secretKey: "sentry-tls"
 
 mail:
   backend: dummy # smtp
@@ -252,7 +252,7 @@ mail:
   from: ""
 
 symbolicator:
-  enabled: false
+  enabled: true
   api:
     replicas: 1
     env: []
@@ -327,13 +327,13 @@ nginx:
     port: 80
 
 ingress:
-  enabled: false
+  enabled: true
   # If you are using traefik ingress controller, switch this to 'traefik'
   regexPathStyle: nginx
-  # annotations:
-  #   If you are using nginx ingress controller, please use at least those 2 annotations
-  #   kubernetes.io/ingress.class: nginx
-  #   nginx.ingress.kubernetes.io/use-regex: "true"
+  annotations:
+    # If you are using nginx ingress controller, please use at least those 2 annotations
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
   #
   # hostname:
   #
@@ -436,9 +436,9 @@ externalClickhouse:
 # See https://github.com/bitnami/charts/tree/master/bitnami/kafka
 kafka:
   enabled: true
-  replicaCount: 3
+  replicaCount: 2
   allowPlaintextListener: true
-  defaultReplicationFactor: 3
+  defaultReplicationFactor: 2
   offsetsTopicReplicationFactor: 3
   transactionStateLogReplicationFactor: 3
   transactionStateLogMinIsr: 3
